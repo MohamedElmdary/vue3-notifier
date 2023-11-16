@@ -92,6 +92,11 @@ export interface NotifierPluginOptions {
    * Avoid throwing error while initializing if something went wrong.
    */
   silent?: boolean;
+
+  /**
+   * Logger which will be used in debug mode.
+   */
+  logger?: Partial<NotifierLogger>;
 }
 
 export interface NotifierOptions
@@ -132,7 +137,6 @@ export interface NotifictionInstance {
 }
 
 export interface NotifierLogger {
-  log(...args: any[]): void;
   info(...args: any[]): void;
   success(...args: any[]): void;
   warn(...args: any[]): void;

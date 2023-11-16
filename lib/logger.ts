@@ -3,25 +3,13 @@ import chalk from 'chalk';
 import type { NotifierLogger } from './types';
 import { IDENTIFIER } from './constants';
 
-function normalizeError(error: string) {
-  return chalk.greenBright(`[${IDENTIFIER}] - `) + chalk.white(new Date().toLocaleString() + '   ') + error;
+function normalizeLog(text: string) {
+  return chalk.greenBright(`[${IDENTIFIER}] - `) + chalk.white(new Date().toLocaleString() + '   ') + text;
 }
-
-function log(text: string): void {
-  return console.log(text);
-}
-
-function info() {}
-function error(...args: any[]): void {
-  return log(normalizeError(chalk.redBright('[Error] ' + args.join(' ') + '.')));
-}
-function warn() {}
-function success() {}
 
 export const logger: NotifierLogger = {
-  log,
-  info,
-  error,
-  warn,
-  success,
+  info: (...args) => console.log(normalizeLog(chalk.blueBright('[Info] ' + args.join(' ') + '.'))),
+  error: (...args) => console.log(normalizeLog(chalk.redBright('[Error] ' + args.join(' ') + '.'))),
+  warn: (...args) => console.log(normalizeLog(chalk.yellowBright('[Warn] ' + args.join(' ') + '.'))),
+  success: (...args) => console.log(normalizeLog(chalk.greenBright('[Success] ' + args.join(' ') + '.'))),
 };
