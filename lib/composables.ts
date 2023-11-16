@@ -2,7 +2,7 @@ import { createApp, inject, type Plugin } from 'vue';
 import type { NotifierPluginOptions, NotifierService } from './types';
 
 import { isBrowserEnv, normalizeNotifierPluginOptions } from './utils';
-import { KEY } from './constants';
+import { ERRORS, KEY } from './constants';
 import NotifierApp from './components/NotifierApp.vue';
 
 export function useNotifierPlugin(options?: NotifierPluginOptions): Plugin {
@@ -10,8 +10,16 @@ export function useNotifierPlugin(options?: NotifierPluginOptions): Plugin {
 
   return {
     install(app) {
-      if (!isBrowserEnv() && !_options.silent) {
-        throw new Error('[vue3-notifier] Plugin setup requires browser environment.');
+      if (!isBrowserEnv()) {
+        if (_options.debug) {
+          console.error(ERRORS.NOT_BROWSER_ENV);
+        }
+
+        if (!_options.silent) {
+          throw new Error(ERRORS.NOT_BROWSER_ENV);
+        }
+
+        return;
       }
 
       // Create 2nd app to serve notifications
