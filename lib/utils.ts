@@ -23,6 +23,9 @@ export function normalizeNotifierPluginOptions(options: NotifierPluginOptions = 
     showCloseButtonOnHover: options.showCloseButtonOnHover || false,
     debug: options.debug || false,
     silent: options.silent || false,
+    persistent: options.persistent || false,
+    newOnTop: options.newOnTop || false,
+    maxNotifictions: options.maxNotifictions || 10,
   };
 }
 

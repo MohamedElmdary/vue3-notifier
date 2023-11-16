@@ -1,8 +1,9 @@
-import type { Plugin } from 'vue';
-import type { NotifierOptions, NotifierPluginOptions, NotifierService } from './types';
+import { createApp, inject, type Plugin } from 'vue';
+import type { NotifierPluginOptions, NotifierService } from './types';
 
-import { isBrowserEnv, normalizeNotifierPluginOptions, normalizeNotifierOptions } from './utils';
+import { isBrowserEnv, normalizeNotifierPluginOptions } from './utils';
 import { KEY } from './constants';
+import NotifierApp from './components/NotifierApp.vue';
 
 export function useNotifierPlugin(options?: NotifierPluginOptions): Plugin {
   const _options = normalizeNotifierPluginOptions(options);
@@ -13,16 +14,17 @@ export function useNotifierPlugin(options?: NotifierPluginOptions): Plugin {
         throw new Error('[vue3-notifier] Plugin setup requires browser environment.');
       }
 
-      const service: NotifierService = {
-        notify() {},
-      };
+      // Create 2nd app to serve notifications
+      const notifierApp = createApp(NotifierApp);
+      _options.plugins.forEach(notifierApp.use);
+      notifierApp.mount(document.body.appendChild(document.createElement('div')));
 
       // Inject notifier service in main app
-      app.provide(KEY, service);
+      app.provide(KEY, notifierApp._instance!.exposed);
     },
   };
 }
 
-export function useNotifier(options?: NotifierOptions) {
-  const _options = normalizeNotifierOptions(options);
+export function useNotifier() {
+  return inject(KEY) as NotifierService;
 }

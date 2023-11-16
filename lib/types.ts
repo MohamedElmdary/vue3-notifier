@@ -8,6 +8,24 @@ export interface NotifierPluginOptions {
   timeout?: number;
 
   /**
+   * If it's true so it won't destroy notifictions.
+   * @default false
+   */
+  persistent?: boolean;
+
+  /**
+   * If it's true so new notifictions should be pushed to top.
+   * @default false
+   */
+  newOnTop?: boolean;
+
+  /**
+   * Max allowed number of notifictions to be shown at once on screen.
+   * @default 10
+   */
+  maxNotifictions?: number;
+
+  /**
    * A vue component which will be rendered as a notifiction.
    * This component will recive a some props will be discussed later.
    */
@@ -76,7 +94,11 @@ export interface NotifierPluginOptions {
   silent?: boolean;
 }
 
-export interface NotifierOptions extends Omit<NotifierPluginOptions, 'position' | 'plugins' | 'debug' | 'silent'> {
+export interface NotifierOptions
+  extends Omit<
+    NotifierPluginOptions,
+    'position' | 'plugins' | 'debug' | 'silent' | 'persistent' | 'newOnTop' | 'maxNotifictions'
+  > {
   /**
    * Toggle icon visability.
    * true -> shown, false -> hidden
@@ -102,5 +124,9 @@ export interface NotifierOptions extends Omit<NotifierPluginOptions, 'position' 
 }
 
 export interface NotifierService {
-  notify(): void;
+  notify(options?: NotifierOptions): NotifictionInstance;
+}
+
+export interface NotifictionInstance {
+  log(): void;
 }
