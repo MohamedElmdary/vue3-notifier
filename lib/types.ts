@@ -64,9 +64,19 @@ export interface NotifierPluginOptions {
    * true -> show only on hover, false -> also will be shown
    */
   showCloseButtonOnHover?: boolean;
+
+  /**
+   * Add some logging if enabled.
+   */
+  debug?: boolean;
+
+  /**
+   * Avoid throwing error while initializing if something went wrong.
+   */
+  silent?: boolean;
 }
 
-export interface NotifierOptions extends Omit<NotifierPluginOptions, 'position' | 'plugins'> {
+export interface NotifierOptions extends Omit<NotifierPluginOptions, 'position' | 'plugins' | 'debug' | 'silent'> {
   /**
    * Toggle icon visability.
    * true -> shown, false -> hidden
@@ -81,7 +91,16 @@ export interface NotifierOptions extends Omit<NotifierPluginOptions, 'position' 
 
   /**
    * Type of the notifiction to be shown.
-   * @default undefined
+   * @default 'default'
    */
-  type?: 'info' | 'warning' | 'success' | 'error';
+  type?: 'default' | 'info' | 'warning' | 'success' | 'error';
+
+  /**
+   * Text to be render in notifiction supports html.
+   */
+  text?: string;
+}
+
+export interface NotifierService {
+  notify(): void;
 }
