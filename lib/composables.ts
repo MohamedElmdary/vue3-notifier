@@ -1,10 +1,10 @@
 import type { Plugin } from 'vue';
-import type { NotifierOptions } from './types';
+import type { NotifierPluginOptions } from './types';
 
-export function useNotifierPlugin(options?: NotifierOptions): Plugin {
+import { KEY } from './constants';
+
+export function useNotifierPlugin(options?: NotifierPluginOptions): Plugin {
   return {
-    install(app) {
-      console.log({ app, options });
-    },
+    install(app) {},
   };
 }

@@ -4,6 +4,6 @@ import NotifierExample from './NotifierExample.vue';
 import { useNotifierPlugin } from '../lib';
 
 createApp(NotifierExample)
-  .use(useNotifierPlugin({ timeout: 0 }))
+  .use(useNotifierPlugin({}))
 
   .mount('#example');
