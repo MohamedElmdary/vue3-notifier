@@ -130,3 +130,11 @@ export interface NotifierService {
 export interface NotifictionInstance {
   log(): void;
 }
+
+export interface NotifierLogger {
+  log(...args: any[]): void;
+  info(...args: any[]): void;
+  success(...args: any[]): void;
+  warn(...args: any[]): void;
+  error(...args: any[]): void;
+}

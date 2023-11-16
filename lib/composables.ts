@@ -11,9 +11,7 @@ export function useNotifierPlugin(options?: NotifierPluginOptions): Plugin {
   return {
     install(app) {
       if (!isBrowserEnv()) {
-        if (_options.debug) {
-          console.error(ERRORS.NOT_BROWSER_ENV);
-        }
+        _options.debug && console.error(ERRORS.NOT_BROWSER_ENV);
 
         if (!_options.silent) {
           throw new Error(ERRORS.NOT_BROWSER_ENV);
