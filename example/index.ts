@@ -7,6 +7,7 @@ createApp(NotifierExample)
   .use(
     useNotifierPlugin({
       debug: process.env.NODE_ENV === 'development',
+      containerClassList: ['h1', 'h2'],
     }),
   )
 

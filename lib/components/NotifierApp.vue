@@ -1,10 +1,12 @@
 <template>
-  <div :style="[positionStyles, { height: '100px', width: '100px', background: 'red' }]"></div>
+  <div
+    :style="[positionStyles, { height: '100px', width: '100px', background: 'red' }, $props.options.containerStyles]"
+    :class="$props.options.containerClassList"
+  ></div>
 </template>
 
 <script lang="ts">
 import { computed, type PropType } from 'vue';
-import type { DeepRequired as DR } from 'utility-types';
 
 import type { NotifierPluginOptions, NotifierService } from '../types';
 import { getPositionStyles } from '../utils';
@@ -13,7 +15,7 @@ export default {
   name: 'NotifierApp',
   props: {
     options: {
-      type: Object as PropType<DR<NotifierPluginOptions>>,
+      type: Object as PropType<Required<NotifierPluginOptions>>,
       required: true,
     },
   },

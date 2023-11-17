@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 
+
 import type { NotifierLogger } from './types';
 import { IDENTIFIER } from './constants';
 

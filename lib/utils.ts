@@ -1,5 +1,4 @@
 import type { StyleValue } from 'vue';
-import type { DeepRequired as DR } from 'utility-types';
 
 import type { NotifierOptions, NotifierPluginOptions } from './types';
 import { logger } from './logger';
@@ -17,7 +16,7 @@ export function isBrowserEnv(): boolean {
   );
 }
 
-export function normalizeNotifierPluginOptions(options: NotifierPluginOptions = {}): DR<NotifierPluginOptions> {
+export function normalizeNotifierPluginOptions(options: NotifierPluginOptions = {}): Required<NotifierPluginOptions> {
   return {
     timeout: options.timeout || 3_000,
     component: options.component || DefaultNotifier,
@@ -36,10 +35,16 @@ export function normalizeNotifierPluginOptions(options: NotifierPluginOptions = 
     maxNotifictions: options.maxNotifictions || 10,
     logger: { ...logger, ...(options.logger || {}) },
     containerOffset: options.containerOffset || 20,
+    containerClassList: options.containerClassList || [],
+    containerWidth: options.containerWidth || 270,
+    containerStyles: options.containerStyles || {},
+    notificationClassList: options.notificationClassList || [],
+    notificationOffset: options.notificationOffset || 20,
+    notificationStyles: options.notificationStyles || {},
   };
 }
 
-export function normalizeNotifierOptions(options: NotifierOptions = {}): DR<NotifierOptions> {
+export function normalizeNotifierOptions(options: NotifierOptions = {}): Required<NotifierOptions> {
   const _options = normalizeNotifierPluginOptions(options);
 
   return {
@@ -55,6 +60,8 @@ export function normalizeNotifierOptions(options: NotifierOptions = {}): DR<Noti
     showIcon: options.showIcon || true,
     text: options.text || '',
     type: options.type || 'default',
+    notificationClassList: _options.notificationClassList,
+    notificationStyles: _options.notificationStyles,
   };
 }
 

@@ -1,6 +1,6 @@
-import type { Component as _Component, Plugin, VNode, VueElement, VueElementConstructor } from 'vue';
+import type { Component, Plugin, StyleValue, VNode, VueElement, VueElementConstructor } from 'vue';
 
-export type Component = _Component | VNode | VueElement | VueElementConstructor;
+export type NotifierComponent = Component | VNode | VueElement | VueElementConstructor;
 
 export interface NotifierPluginOptions {
   /**
@@ -31,7 +31,7 @@ export interface NotifierPluginOptions {
    * A vue component which will be rendered as a notifiction.
    * This component will recive a some props will be discussed later.
    */
-  component?: Component;
+  component?: NotifierComponent;
 
   /**
    * Props to pass to component.
@@ -77,7 +77,7 @@ export interface NotifierPluginOptions {
   /**
    * A vue component that will be used as a close button.
    */
-  closeButton?: Component;
+  closeButton?: NotifierComponent;
 
   /**
    * Toggle showing close button unless you hover the notifiction.
@@ -105,6 +105,42 @@ export interface NotifierPluginOptions {
    * @default 20
    */
   containerOffset?: number;
+
+  /**
+   * Container max width (in px)
+   * @default 270
+   */
+  containerWidth?: number;
+
+  /**
+   * container class list
+   * @default []
+   */
+  containerClassList?: string[];
+
+  /**
+   * container extra styles
+   * @default {}
+   */
+  containerStyles?: StyleValue;
+
+  /**
+   * Notification offset (in px)
+   * @default 20
+   */
+  notificationOffset?: number;
+
+  /**
+   * Notification class list
+   * @default []
+   */
+  notificationClassList?: string[];
+
+  /**
+   * Notification extra styles
+   * @default {}
+   */
+  notificationStyles?: StyleValue;
 }
 
 export interface NotifierOptions
@@ -119,6 +155,10 @@ export interface NotifierOptions
     | 'maxNotifictions'
     | 'logger'
     | 'containerOffset'
+    | 'containerWidth'
+    | 'containerClassList'
+    | 'containerStyles'
+    | 'notificationOffset'
   > {
   /**
    * Toggle icon visability.
@@ -130,7 +170,7 @@ export interface NotifierOptions
   /**
    * Icon to show if showIcon is true
    */
-  icon?: Component;
+  icon?: NotifierComponent;
 
   /**
    * Type of the notifiction to be shown.
