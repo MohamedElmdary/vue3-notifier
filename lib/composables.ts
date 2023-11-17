@@ -23,7 +23,7 @@ export function useNotifierPlugin(options?: NotifierPluginOptions): Plugin {
       }
 
       // Create 2nd app to serve notifications
-      const notifierApp = createApp(NotifierApp);
+      const notifierApp = createApp(NotifierApp, { options: _options });
       _options.plugins.forEach(notifierApp.use);
       notifierApp.mount(document.body.appendChild(document.createElement('div')));
 

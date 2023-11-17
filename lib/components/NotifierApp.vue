@@ -1,22 +1,34 @@
-<template>NotifierApp</template>
+<template>
+  <div :style="[positionStyles, { height: '100px', width: '100px', background: 'red' }]"></div>
+</template>
 
 <script lang="ts">
-import { NotifierService } from '../types';
+import { computed, type PropType } from 'vue';
+import type { DeepRequired as DR } from 'utility-types';
+
+import type { NotifierPluginOptions, NotifierService } from '../types';
+import { getPositionStyles } from '../utils';
 
 export default {
   name: 'NotifierApp',
-  setup(_, { expose }) {
+  props: {
+    options: {
+      type: Object as PropType<DR<NotifierPluginOptions>>,
+      required: true,
+    },
+  },
+  setup({ options }, ctx) {
+    const positionStyles = computed(() => getPositionStyles(options.position, options.containerOffset));
+
     const service: NotifierService = {
       notify(options) {
-        return {
-          log() {
-            console.log(options, 'hello world');
-          },
-        };
+        console.log(options);
+        return {};
       },
     };
+    ctx.expose(service);
 
-    expose(service);
+    return { positionStyles };
   },
 };
 </script>

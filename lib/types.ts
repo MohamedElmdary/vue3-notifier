@@ -72,7 +72,7 @@ export interface NotifierPluginOptions {
    * Note: "top" = "top center" & "bottom" = "bottom center"
    * @default "bottom right"
    */
-  position?: `${'top' | 'bottom'}${'' | ' center' | ' left' | ' right'}`;
+  position?: `${'top' | 'bottom'}${'' | ' center' | ' left' | ' right'}` | 'center' | 'center center';
 
   /**
    * A vue component that will be used as a close button.
@@ -99,12 +99,26 @@ export interface NotifierPluginOptions {
    * Logger which will be used in debug mode.
    */
   logger?: Partial<NotifierLogger>;
+
+  /**
+   * Offset between container holding notifications and the edges of the screen (in px)
+   * @default 20
+   */
+  containerOffset?: number;
 }
 
 export interface NotifierOptions
   extends Omit<
     NotifierPluginOptions,
-    'position' | 'plugins' | 'debug' | 'silent' | 'persistent' | 'newOnTop' | 'maxNotifictions' | 'logger'
+    | 'position'
+    | 'plugins'
+    | 'debug'
+    | 'silent'
+    | 'persistent'
+    | 'newOnTop'
+    | 'maxNotifictions'
+    | 'logger'
+    | 'containerOffset'
   > {
   /**
    * Toggle icon visability.
@@ -134,9 +148,7 @@ export interface NotifierService {
   notify(options?: NotifierOptions): NotifictionInstance;
 }
 
-export interface NotifictionInstance {
-  log(): void;
-}
+export interface NotifictionInstance {}
 
 export interface NotifierLogger {
   info(...args: any[]): void;

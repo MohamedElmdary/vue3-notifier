@@ -1,6 +1,7 @@
-import { DeepRequired as DR } from 'utility-types';
+import type { StyleValue } from 'vue';
+import type { DeepRequired as DR } from 'utility-types';
 
-import { NotifierOptions, NotifierPluginOptions } from './types';
+import type { NotifierOptions, NotifierPluginOptions } from './types';
 import { logger } from './logger';
 
 import DefaultNotifier from './components/DefaultNotifier.vue';
@@ -34,6 +35,7 @@ export function normalizeNotifierPluginOptions(options: NotifierPluginOptions = 
     newOnTop: options.newOnTop || false,
     maxNotifictions: options.maxNotifictions || 10,
     logger: { ...logger, ...(options.logger || {}) },
+    containerOffset: options.containerOffset || 20,
   };
 }
 
@@ -54,4 +56,32 @@ export function normalizeNotifierOptions(options: NotifierOptions = {}): DR<Noti
     text: options.text || '',
     type: options.type || 'default',
   };
+}
+
+export function getPositionStyles(position: NotifierPluginOptions['position'], offset: number): StyleValue {
+  switch (position) {
+    case 'top':
+    case 'top center':
+      return { position: 'fixed', top: offset + 'px', left: '50%', transform: 'translateX(-50%)' };
+
+    case 'top left':
+      return { position: 'fixed', top: offset + 'px', left: offset + 'px' };
+
+    case 'top right':
+      return { position: 'fixed', top: offset + 'px', right: offset + 'px' };
+
+    case 'bottom':
+    case 'bottom center':
+      return { position: 'fixed', bottom: offset + 'px', left: '50%', transform: 'translateX(-50%)' };
+
+    case 'bottom left':
+      return { position: 'fixed', bottom: offset + 'px', left: offset + 'px' };
+
+    case 'center':
+    case 'center center':
+      return { position: 'fixed', top: '50%', left: '50%', transform: 'translateX(-50%, -50)' };
+
+    default:
+      return { position: 'fixed', bottom: offset + 'px', right: offset + 'px' };
+  }
 }

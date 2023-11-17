@@ -13,7 +13,9 @@ export default {
       type: 'warning',
     });
 
-    notification.log();
+    console.log('NotificationInstance', notification);
+
+    // notification.log();
   },
 };
 </script>
