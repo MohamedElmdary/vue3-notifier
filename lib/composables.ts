@@ -1,8 +1,10 @@
 import { createApp, inject, type Plugin } from 'vue';
-import type { NotifierPluginOptions, NotifierService } from './types';
 
+import type { NotifierPluginOptions, NotifierService } from './types';
 import { isBrowserEnv, normalizeNotifierPluginOptions } from './utils';
 import { ERRORS, KEY } from './constants';
+import { logger } from './logger';
+
 import NotifierApp from './components/NotifierApp.vue';
 
 export function useNotifierPlugin(options?: NotifierPluginOptions): Plugin {
@@ -11,7 +13,7 @@ export function useNotifierPlugin(options?: NotifierPluginOptions): Plugin {
   return {
     install(app) {
       if (!isBrowserEnv()) {
-        _options.debug && console.error(ERRORS.NOT_BROWSER_ENV);
+        _options.debug && logger.error(ERRORS.NOT_BROWSER_ENV);
 
         if (!_options.silent) {
           throw new Error(ERRORS.NOT_BROWSER_ENV);

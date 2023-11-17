@@ -1,4 +1,6 @@
-import type { Component, Plugin } from 'vue';
+import type { Component as _Component, Plugin, VNode, VueElement, VueElementConstructor } from 'vue';
+
+export type Component = _Component | VNode | VueElement | VueElementConstructor;
 
 export interface NotifierPluginOptions {
   /**
@@ -102,7 +104,7 @@ export interface NotifierPluginOptions {
 export interface NotifierOptions
   extends Omit<
     NotifierPluginOptions,
-    'position' | 'plugins' | 'debug' | 'silent' | 'persistent' | 'newOnTop' | 'maxNotifictions'
+    'position' | 'plugins' | 'debug' | 'silent' | 'persistent' | 'newOnTop' | 'maxNotifictions' | 'logger'
   > {
   /**
    * Toggle icon visability.

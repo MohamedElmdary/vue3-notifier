@@ -1,0 +1,1 @@
+<template>DefaultIcon</template>
