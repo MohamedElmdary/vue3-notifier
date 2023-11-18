@@ -156,3 +156,26 @@ export function getNotificationIcon(type: NotifierOptions['type']): NotifierOpti
       return DefaultIcon;
   }
 }
+
+export function getTransitionName(position: NotifierPluginOptions['position']): string {
+  switch (position) {
+    case 'bottom left':
+    case 'top left':
+      return 'vue3-notifier-notifications-list-left';
+
+    case 'center':
+    case 'center center':
+      return 'vue3-notifier-notifications-list-center';
+
+    case 'top':
+    case 'top center':
+      return 'vue3-notifier-notifications-list-top';
+
+    case 'bottom':
+    case 'bottom center':
+      return 'vue3-notifier-notifications-list-bottom';
+
+    default:
+      return 'vue3-notifier-notifications-list';
+  }
+}

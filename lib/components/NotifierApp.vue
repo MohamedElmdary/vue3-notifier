@@ -1,9 +1,11 @@
 <template>
   <transition-group
-    name="vue3-notifier-notifications-list"
+    appear
+    :name="transitionName"
     tag="section"
     :style="[positionStyles, { width: $props.options.containerWidth + 'px' }, $props.options.containerStyles]"
     :class="['vue3-notifier-container', $props.options.containerClassList]"
+    @leave="(el, done) => leave($props.options.position.includes('left'))(el, done)"
   >
     <div
       v-for="notification in notifications"
@@ -17,9 +19,15 @@
 
 <script lang="ts">
 import { type PropType, type Ref, computed, toRef, shallowRef } from 'vue';
+import { leave } from '../animations';
 
 import type { NotifierPluginOptions, NotifierService, NotifierOptions } from '../types';
-import { getPositionStyles, normalizeNotifierPluginOptions, normalizeNotifierOptions } from '../utils';
+import {
+  getPositionStyles,
+  normalizeNotifierPluginOptions,
+  normalizeNotifierOptions,
+  getTransitionName,
+} from '../utils';
 
 let id = 1;
 
@@ -43,6 +51,8 @@ export default {
     const notifications = shallowRef([]) as Ref<Required<NotifierOptions & { id: number }>[]>;
 
     const positionStyles = computed(() => getPositionStyles(options.value.position, options.value.containerOffset));
+
+    const transitionName = computed(() => getTransitionName(options.value.position));
 
     const service: NotifierService = {
       updatePluginOptions(newOptions = {}) {
@@ -77,33 +87,30 @@ export default {
     };
     ctx.expose(service);
 
-    return { notifications, positionStyles };
+    return { notifications, positionStyles, leave, transitionName };
   },
 };
 </script>
 
 <style scoped lang="scss">
-.vue3-notifier-notifications-list-leave-to,
+.vue3-notifier-notifications-list-left-enter-from,
 .vue3-notifier-notifications-list-enter-from {
   opacity: 0;
-  transform: translateY(100%);
+  transform: translateX(100%);
 }
 
-.vue3-notifier-notifications-list-leave-from,
+.vue3-notifier-notifications-list-left-enter-from {
+  transform: translateX(-100%);
+}
+
+.vue3-notifier-notifications-list-left-enter-to,
 .vue3-notifier-notifications-list-enter-to {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateX(0);
 }
 
-.vue3-notifier-notifications-list-move,
-.vue3-notifier-notifications-list-leave-active,
+.vue3-notifier-notifications-list-left-enter-active,
 .vue3-notifier-notifications-list-enter-active {
-  transition:
-    opacity 0.3s ease,
-    transform 0.5s ease;
-}
-
-.vue3-notifier-notifications-list-leave-active {
-  position: absolute;
+  transition: all 0.5s ease;
 }
 </style>

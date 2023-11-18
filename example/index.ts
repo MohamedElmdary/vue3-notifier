@@ -10,6 +10,7 @@ createApp(NotifierExample)
       containerClassList: ['h1', 'h2'],
       showProgressBar: true,
       persistent: true,
+      position: 'bottom',
     }),
   )
 
