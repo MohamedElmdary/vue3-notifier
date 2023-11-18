@@ -147,6 +147,18 @@ export interface NotifierPluginOptions {
    * @default {}
    */
   notificationStyles?: StyleValue;
+
+  /**
+   * Hide all button component.
+   */
+  hideAllButton?: NotifierComponent;
+
+  /**
+   * Toggle shown for hide all button
+   * true -> shown, false hidden
+   * @default true
+   */
+  showHideAllButton?: boolean;
 }
 
 export interface NotifierOptions
@@ -165,6 +177,8 @@ export interface NotifierOptions
     | 'containerStyles'
     | 'notificationOffset'
     | 'id'
+    | 'hideAllButton'
+    | 'showHideAllButton'
   > {
   /**
    * Toggle icon visability.
@@ -202,12 +216,10 @@ export interface NotifierExtraOptions {
 
 export interface NotifierService {
   updatePluginOptions(options?: NotifierPluginOptions): void;
-  notify(options?: NotifierOptions): NotifictionInstance;
+  notify(options?: NotifierOptions): Required<NotifierOptions & NotifierExtraOptions>;
   destroy(id: number): boolean;
   destroyAll(): void;
 }
-
-export interface NotifictionInstance {}
 
 export interface NotifierLogger {
   info(...args: any[]): void;

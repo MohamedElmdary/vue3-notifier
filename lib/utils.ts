@@ -11,6 +11,7 @@ import InfoIcon from './components/icons/InfoIcon.vue';
 import WarningIcon from './components/icons/WarningIcon.vue';
 import ErrorIcon from './components/icons/ErrorIcon.vue';
 import SuccessIcon from './components/icons/SuccessIcon.vue';
+import HideAllBtn from './components/HideAllBtn.vue';
 
 export function isBrowserEnv(): boolean {
   return (
@@ -63,6 +64,8 @@ export function normalizeNotifierPluginOptions(
     notificationClassList: options.notificationClassList || defaultOptions.notificationClassList || [],
     notificationOffset: options.notificationOffset || defaultOptions.notificationOffset || 20,
     notificationStyles: options.notificationStyles || defaultOptions.notificationStyles || {},
+    hideAllButton: markRaw(options.hideAllButton || defaultOptions.hideAllButton || HideAllBtn),
+    showHideAllButton: pickBoolean(false, options.showHideAllButton, defaultOptions.showHideAllButton),
   };
 }
 

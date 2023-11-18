@@ -27,8 +27,6 @@ export function useNotifierPlugin(options?: NotifierPluginOptions): Plugin {
       _options.plugins.forEach(notifierApp.use);
       notifierApp.mount(document.body.appendChild(document.createElement('div')));
 
-      console.log(getKey(_options.id));
-
       // Inject notifier service in main app
       app.provide(getKey(_options.id), notifierApp._instance!.exposed);
     },
