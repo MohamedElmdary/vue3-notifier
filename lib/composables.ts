@@ -1,8 +1,8 @@
 import { createApp, inject, type Plugin } from 'vue';
 
 import type { NotifierPluginOptions, NotifierService } from './types';
-import { isBrowserEnv, normalizeNotifierPluginOptions } from './utils';
-import { ERRORS, KEY } from './constants';
+import { isBrowserEnv, normalizeNotifierPluginOptions, getKey } from './utils';
+import { ERRORS } from './constants';
 import { logger } from './logger';
 
 import NotifierApp from './components/NotifierApp.vue';
@@ -27,12 +27,18 @@ export function useNotifierPlugin(options?: NotifierPluginOptions): Plugin {
       _options.plugins.forEach(notifierApp.use);
       notifierApp.mount(document.body.appendChild(document.createElement('div')));
 
+      console.log(getKey(_options.id));
+
       // Inject notifier service in main app
-      app.provide(KEY, notifierApp._instance!.exposed);
+      app.provide(getKey(_options.id), notifierApp._instance!.exposed);
     },
   };
 }
 
-export function useNotifier() {
-  return inject(KEY) as NotifierService;
+/**
+ * ID is targeting specific app
+ * @param { string } id
+ */
+export function useNotifier(id: string = 'default') {
+  return inject(getKey(id)) as NotifierService;
 }

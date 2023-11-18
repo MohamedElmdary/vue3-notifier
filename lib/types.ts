@@ -4,6 +4,12 @@ export type NotifierComponent = Component | VNode | VueElement | VueElementConst
 
 export interface NotifierPluginOptions {
   /**
+   * This identifier should be used only while having more than one notifiction app
+   * @default 'default'
+   */
+  id?: string;
+
+  /**
    * A number in ms that indicates the time before the notifiction gets destroied.
    * @default 3_000
    */
@@ -158,6 +164,7 @@ export interface NotifierOptions
     | 'containerClassList'
     | 'containerStyles'
     | 'notificationOffset'
+    | 'id'
   > {
   /**
    * Toggle icon visability.

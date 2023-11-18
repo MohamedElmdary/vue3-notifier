@@ -17,7 +17,6 @@ export function leave(toLeft = false) {
           height: 0,
           margin: 0,
           duration: 0.5,
-          onComplete: done,
         }),
       )
       .then(done);

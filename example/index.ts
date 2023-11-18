@@ -9,8 +9,12 @@ createApp(NotifierExample)
       debug: process.env.NODE_ENV === 'development',
       containerClassList: ['h1', 'h2'],
       showProgressBar: true,
-      persistent: true,
-      position: 'bottom',
+    }),
+  )
+  .use(
+    useNotifierPlugin({
+      id: 'x',
+      position: 'bottom left',
     }),
   )
 

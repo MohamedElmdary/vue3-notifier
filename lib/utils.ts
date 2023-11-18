@@ -2,6 +2,7 @@ import { type StyleValue, markRaw } from 'vue';
 
 import type { NotifierOptions, NotifierPluginOptions, NotifierExtraOptions } from './types';
 import { logger } from './logger';
+import { IDENTIFIER } from './constants';
 
 import DefaultNotifier from './components/DefaultNotifier.vue';
 import DefaultCloseBtn from './components/DefaultCloseBtn.vue';
@@ -20,6 +21,10 @@ export function isBrowserEnv(): boolean {
   );
 }
 
+export function getKey(id: string): string {
+  return `key(${IDENTIFIER}(${id}))`;
+}
+
 function pickBoolean(defaultValue: boolean, ...args: (boolean | undefined)[]): boolean {
   for (const arg of args) {
     if (typeof arg === 'boolean') {
@@ -34,6 +39,7 @@ export function normalizeNotifierPluginOptions(
   defaultOptions: NotifierPluginOptions = {},
 ): Required<NotifierPluginOptions> {
   return {
+    id: options.id || defaultOptions.id || 'default',
     timeout: options.timeout || defaultOptions.timeout || 3_000,
     component: markRaw(options.component || defaultOptions.component || DefaultNotifier),
     props: options.props || defaultOptions.props || {},
@@ -112,7 +118,7 @@ export function getPositionStyles(position: NotifierPluginOptions['position'], o
 
     case 'center':
     case 'center center':
-      return { position: 'fixed', top: '50%', left: '50%', transform: 'translateX(-50%, -50)' };
+      return { position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' };
 
     default:
       return { position: 'fixed', bottom: offset + 'px', right: offset + 'px' };
@@ -163,19 +169,11 @@ export function getTransitionName(position: NotifierPluginOptions['position']): 
     case 'top left':
       return 'vue3-notifier-notifications-list-left';
 
-    case 'center':
-    case 'center center':
-      return 'vue3-notifier-notifications-list-center';
-
-    case 'top':
-    case 'top center':
-      return 'vue3-notifier-notifications-list-top';
-
-    case 'bottom':
-    case 'bottom center':
-      return 'vue3-notifier-notifications-list-bottom';
+    case 'bottom right':
+    case 'top right':
+      return 'vue3-notifier-notifications-list';
 
     default:
-      return 'vue3-notifier-notifications-list';
+      return 'vue3-notifier-notifications-list-center';
   }
 }

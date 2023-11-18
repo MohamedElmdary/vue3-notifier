@@ -1,11 +1,14 @@
 <template>
+  {{ transitionName }}
   <transition-group
     appear
     :name="transitionName"
     tag="section"
     :style="[positionStyles, { width: $props.options.containerWidth + 'px' }, $props.options.containerStyles]"
     :class="['vue3-notifier-container', $props.options.containerClassList]"
-    @leave="(el, done) => leave($props.options.position.includes('left'))(el, done)"
+    v-bind="{
+      onLeave: transitionName.includes('center') ? undefined : leave($props.options.position.includes('left')),
+    }"
   >
     <div
       v-for="notification in notifications"
@@ -111,6 +114,31 @@ export default {
 
 .vue3-notifier-notifications-list-left-enter-active,
 .vue3-notifier-notifications-list-enter-active {
+  transition: all 0.5s ease;
+}
+
+.vue3-notifier-notifications-list-center-leave-to,
+.vue3-notifier-notifications-list-center-enter-from {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+.vue3-notifier-notifications-list-center-leave-from,
+.vue3-notifier-notifications-list-center-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.vue3-notifier-notifications-list-center-leave-active,
+.vue3-notifier-notifications-list-center-enter-active {
+  transition: all 0.5s ease;
+}
+
+.vue3-notifier-notifications-list-center-leave-active {
+  position: absolute;
+}
+
+.vue3-notifier-notifications-list-center-move {
   transition: all 0.5s ease;
 }
 </style>
