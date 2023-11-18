@@ -13,13 +13,13 @@
     </div>
 
     <div
-      v-for="notification in notifications"
+      v-for="notification in visibleNotifications"
       :key="notification.id"
       :style="{
         [options$.position.includes('bottom') ? 'marginTop' : 'marginBottom']: options$.notificationOffset + 'px',
       }"
     >
-      <component :is="options$.component" :options="notification" />
+      <component :is="options$.component" :options="notification" :global-options="options$" v-bind="options$.props" />
     </div>
 
     <div key="hide-all-btn" v-if="!options$.position.includes('bottom') && showHideAllBtn">
@@ -67,6 +67,13 @@ export default {
 
     const showHideAllBtn = computed(() => notifications.value.length > 1 && options$.value.showHideAllButton);
 
+    const visibleNotifications = computed(() => {
+      if (options$.value.newOnTop) {
+        return notifications.value.slice(0, 3);
+      }
+      return notifications.value.slice(-3);
+    });
+
     const service: NotifierService = {
       updatePluginOptions(newOptions = {}) {
         options$.value = normalizeNotifierPluginOptions(newOptions, options$.value);
@@ -76,31 +83,54 @@ export default {
         const notification = normalizeNotifierOptions(newOptions, options$.value, {
           id: id++,
           destroy() {
-            notifications.value = notifications.value.filter((n) => n !== notification);
+            return service.destroy(notification.id);
           },
         });
-        notifications.value = [...notifications.value, notification];
+        notifications.value = options$.value.newOnTop
+          ? [notification, ...notifications.value]
+          : [...notifications.value, notification];
+        options$.value.debug &&
+          options$.value.logger.success!(`Successfully add new notification with id(${notification.id})`);
         return notification;
       },
 
       destroy(id: number) {
         const index = notifications.value.findIndex((n) => n.id === id);
         if (index === -1) {
+          options$.value.debug && options$.value.logger.warn!(`Notification with id(${id}) was not found`);
           return false;
         }
         const newNotifications = notifications.value.slice();
-        newNotifications.slice(index, 1);
+        newNotifications.splice(index, 1);
         notifications.value = newNotifications;
+        options$.value.debug && options$.value.logger.success!(`Notification with id(${id}) is destroied`);
         return true;
       },
 
       destroyAll() {
+        if (options$.value.debug) {
+          if (notifications.value.length > 0) {
+            options$.value.logger.success!('Successfully destroied all notifications');
+          } else {
+            options$.value.logger.warn!('No notifications were found to be destroied');
+          }
+        }
+
         notifications.value = [];
       },
     };
     ctx.expose(service);
 
-    return { options$, notifications, positionStyles, leave, transitionName, showHideAllBtn, service };
+    return {
+      options$,
+      notifications,
+      positionStyles,
+      leave,
+      transitionName,
+      showHideAllBtn,
+      visibleNotifications,
+      service,
+    };
   },
 };
 </script>

@@ -11,153 +11,162 @@ export default {
   setup() {
     const notifier = useNotifier();
 
-    onMounted(async () => {
-      let a = notifier.notify({
-        title: 'Failed to deploy vm',
-        description:
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
-      });
+    notifier.destroyAll();
 
-      await delay();
-
-      let b = notifier.notify({
-        title: 'Failed to deploy vm',
-        description:
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
-        type: 'info',
-      });
-
-      await delay();
-
-      let c = notifier.notify({
-        title: 'Failed to deploy vm',
-        description:
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
-        type: 'error',
-      });
-
-      await delay();
-
-      let d = notifier.notify({
-        title: 'Failed to deploy vm',
-        description:
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
-        type: 'success',
-      });
-
-      await delay();
-
-      let e = notifier.notify({
-        title: 'Failed to deploy vm',
-        description:
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
-        type: 'warning',
-      });
-
-      await delay();
-
-      d.destroy();
-
-      await delay(1500);
-
-      notifier.updatePluginOptions({ position: 'top right' });
-
-      await delay();
-
-      notifier.notify({
-        title: 'Failed to deploy vm',
-        description:
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
-        type: 'success',
-      });
-
-      await delay();
-
-      b.destroy();
-
-      await delay(1500);
-
-      notifier.updatePluginOptions({ position: 'bottom left' });
-
-      await delay();
-
-      notifier.notify({
-        title: 'Failed to deploy vm',
-        description:
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
-        type: 'info',
-      });
-
-      await delay();
-
-      a.destroy();
-
-      await delay(1500);
-
-      notifier.updatePluginOptions({ position: 'top left' });
-
-      await delay();
-
-      let f = notifier.notify({
-        title: 'Failed to deploy vm',
-        description:
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
-      });
-
-      await delay();
-
-      c.destroy();
-
-      await delay(1500);
-
-      notifier.updatePluginOptions({ position: 'top' });
-
-      await delay();
-
-      notifier.notify({
-        title: 'Failed to deploy vm',
-        description:
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
-        type: 'error',
-      });
-
-      await delay();
-
-      e.destroy();
-
-      await delay(1500);
-
-      notifier.updatePluginOptions({ position: 'bottom' });
-
-      await delay();
-
-      notifier.notify({
-        title: 'Failed to deploy vm',
-        description:
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
-        type: 'warning',
-      });
-
-      await delay();
-
-      f.destroy();
-
-      await delay(1500);
-
-      notifier.updatePluginOptions({ position: 'center' });
-
-      await delay();
-
-      notifier.notify({
-        title: 'Failed to deploy vm',
-        description:
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
-      });
-
-      await delay(1500);
-
-      notifier.destroyAll();
+    notifier.notify({
+      pauseOnHover: true,
+      title: 'title',
+      description: 'description',
+      persistent: false,
     });
+
+    // onMounted(async () => {
+    //   let a = notifier.notify({
+    //     title: 'Failed to deploy vm',
+    //     description:
+    //       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
+    //   });
+
+    //   await delay();
+
+    //   let b = notifier.notify({
+    //     title: 'Failed to deploy vm',
+    //     description:
+    //       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
+    //     type: 'info',
+    //   });
+
+    //   await delay();
+
+    //   let c = notifier.notify({
+    //     title: 'Failed to deploy vm',
+    //     description:
+    //       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
+    //     type: 'error',
+    //   });
+
+    //   await delay();
+
+    //   let d = notifier.notify({
+    //     title: 'Failed to deploy vm',
+    //     description:
+    //       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
+    //     type: 'success',
+    //   });
+
+    //   await delay();
+
+    //   let e = notifier.notify({
+    //     title: 'Failed to deploy vm',
+    //     description:
+    //       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
+    //     type: 'warning',
+    //   });
+
+    //   await delay();
+
+    //   d.destroy();
+
+    //   await delay(1500);
+
+    //   notifier.updatePluginOptions({ position: 'top right' });
+
+    //   await delay();
+
+    //   notifier.notify({
+    //     title: 'Failed to deploy vm',
+    //     description:
+    //       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
+    //     type: 'success',
+    //   });
+
+    //   await delay();
+
+    //   b.destroy();
+
+    //   await delay(1500);
+
+    //   notifier.updatePluginOptions({ position: 'bottom left' });
+
+    //   await delay();
+
+    //   notifier.notify({
+    //     title: 'Failed to deploy vm',
+    //     description:
+    //       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
+    //     type: 'info',
+    //   });
+
+    //   await delay();
+
+    //   a.destroy();
+
+    //   await delay(1500);
+
+    //   notifier.updatePluginOptions({ position: 'top left' });
+
+    //   await delay();
+
+    //   let f = notifier.notify({
+    //     title: 'Failed to deploy vm',
+    //     description:
+    //       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
+    //   });
+
+    //   await delay();
+
+    //   c.destroy();
+
+    //   await delay(1500);
+
+    //   notifier.updatePluginOptions({ position: 'top' });
+
+    //   await delay();
+
+    //   notifier.notify({
+    //     title: 'Failed to deploy vm',
+    //     description:
+    //       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
+    //     type: 'error',
+    //   });
+
+    //   await delay();
+
+    //   e.destroy();
+
+    //   await delay(1500);
+
+    //   notifier.updatePluginOptions({ position: 'bottom' });
+
+    //   await delay();
+
+    //   notifier.notify({
+    //     title: 'Failed to deploy vm',
+    //     description:
+    //       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
+    //     type: 'warning',
+    //   });
+
+    //   await delay();
+
+    //   f.destroy();
+
+    //   await delay(1500);
+
+    //   notifier.updatePluginOptions({ position: 'center' });
+
+    //   await delay();
+
+    //   notifier.notify({
+    //     title: 'Failed to deploy vm',
+    //     description:
+    //       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex est ipsam, architecto dolorem et ad facere.',
+    //   });
+
+    //   await delay(1500);
+
+    //   notifier.destroyAll();
+    // });
 
     // console.log(notifier);
 

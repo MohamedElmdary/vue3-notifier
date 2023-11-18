@@ -29,7 +29,7 @@ export interface NotifierPluginOptions {
 
   /**
    * Max allowed number of notifictions to be shown at once on screen.
-   * @default 10
+   * @default 3
    */
   maxNotifictions?: number;
 
@@ -211,7 +211,7 @@ export interface NotifierOptions
 
 export interface NotifierExtraOptions {
   id?: number;
-  destroy?(): void;
+  destroy?(): boolean;
 }
 
 export interface NotifierService {

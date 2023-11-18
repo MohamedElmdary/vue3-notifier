@@ -2,8 +2,6 @@ import { createApp, inject, type Plugin } from 'vue';
 
 import type { NotifierPluginOptions, NotifierService } from './types';
 import { isBrowserEnv, normalizeNotifierPluginOptions, getKey } from './utils';
-import { ERRORS } from './constants';
-import { logger } from './logger';
 
 import NotifierApp from './components/NotifierApp.vue';
 
@@ -13,22 +11,24 @@ export function useNotifierPlugin(options?: NotifierPluginOptions): Plugin {
   return {
     install(app) {
       if (!isBrowserEnv()) {
-        _options.debug && logger.error(ERRORS.NOT_BROWSER_ENV);
+        _options.debug && _options.logger.error!('Plugin setup requires browser environment');
 
         if (!_options.silent) {
-          throw new Error(ERRORS.NOT_BROWSER_ENV);
+          throw new Error('Plugin setup requires browser environment');
         }
 
         return;
       }
 
       // Create 2nd app to serve notifications
+      _options.debug && _options.logger.info!(`Start initializing plugin for project(${_options.id})`);
       const notifierApp = createApp(NotifierApp, { options: _options });
       _options.plugins.forEach(notifierApp.use);
       notifierApp.mount(document.body.appendChild(document.createElement('div')));
 
       // Inject notifier service in main app
       app.provide(getKey(_options.id), notifierApp._instance!.exposed);
+      _options.debug && _options.logger.info!(`Plugin is initialized and ready to use for project(${_options.id})`);
     },
   };
 }

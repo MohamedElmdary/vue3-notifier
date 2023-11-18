@@ -55,7 +55,7 @@ export function normalizeNotifierPluginOptions(
     silent: pickBoolean(false, options.silent, defaultOptions.silent),
     persistent: pickBoolean(false, options.persistent, defaultOptions.persistent),
     newOnTop: pickBoolean(false, options.newOnTop, defaultOptions.newOnTop),
-    maxNotifictions: options.maxNotifictions || defaultOptions.maxNotifictions || 10,
+    maxNotifictions: options.maxNotifictions || defaultOptions.maxNotifictions || 3,
     logger: { ...logger, ...(options.logger || defaultOptions.logger || {}) },
     containerOffset: options.containerOffset || defaultOptions.containerOffset || 20,
     containerClassList: options.containerClassList || defaultOptions.containerClassList || [],

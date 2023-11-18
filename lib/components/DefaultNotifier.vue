@@ -49,7 +49,7 @@
 <script lang="ts">
 import { computed, type PropType } from 'vue';
 
-import type { NotifierOptions, NotifierExtraOptions } from '../types';
+import type { NotifierOptions, NotifierExtraOptions, NotifierPluginOptions } from '../types';
 import { getNotificationBackgroundColor } from '../utils';
 import { useDestroyTimer } from '../hooks';
 
@@ -60,17 +60,20 @@ export default {
       type: Object as PropType<Required<NotifierOptions & NotifierExtraOptions>>,
       required: true,
     },
+    globalOptions: {
+      type: Object as PropType<Required<NotifierPluginOptions>>,
+      required: true,
+    },
+    greeting: String,
   },
   setup(props) {
+    console.log(props.greeting);
+
     const backgroundColor = computed(() => getNotificationBackgroundColor(props.options.type));
 
-    const destroyTimer = useDestroyTimer(
-      props.options.timeout,
-      () => {
-        props.options.destroy();
-      },
-      props.options.persistent,
-    );
+    const destroyTimer = useDestroyTimer(props.options, props.globalOptions, () => {
+      props.options.destroy();
+    });
 
     return { backgroundColor, destroyTimer };
   },

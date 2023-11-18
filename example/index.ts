@@ -11,6 +11,8 @@ createApp(NotifierExample)
       showProgressBar: true,
       persistent: true,
       showHideAllButton: true,
+      newOnTop: true,
+      props: { greeting: 'hello world' },
     }),
   )
   .use(
