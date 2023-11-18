@@ -1,15 +1,27 @@
 <template>
-  <div
-    :style="[positionStyles, { height: '100px', width: '100px', background: 'red' }, $props.options.containerStyles]"
-    :class="$props.options.containerClassList"
-  ></div>
+  <transition-group
+    name="vue3-notifier-notifications-list"
+    tag="section"
+    :style="[positionStyles, { width: $props.options.containerWidth + 'px' }, $props.options.containerStyles]"
+    :class="['vue3-notifier-container', $props.options.containerClassList]"
+  >
+    <div
+      v-for="notification in notifications"
+      :key="notification.id"
+      :style="{ marginTop: $props.options.notificationOffset + 'px' }"
+    >
+      <component :is="$props.options.component" :options="notification" />
+    </div>
+  </transition-group>
 </template>
 
 <script lang="ts">
-import { computed, type PropType } from 'vue';
+import { type PropType, type Ref, computed, toRef, shallowRef } from 'vue';
 
-import type { NotifierPluginOptions, NotifierService } from '../types';
-import { getPositionStyles } from '../utils';
+import type { NotifierPluginOptions, NotifierService, NotifierOptions } from '../types';
+import { getPositionStyles, normalizeNotifierPluginOptions, normalizeNotifierOptions } from '../utils';
+
+let id = 1;
 
 export default {
   name: 'NotifierApp',
@@ -19,18 +31,79 @@ export default {
       required: true,
     },
   },
-  setup({ options }, ctx) {
-    const positionStyles = computed(() => getPositionStyles(options.position, options.containerOffset));
+  setup(props, ctx) {
+    /**
+     * Turn `props.options` into ref to allow modifying it from service
+     */
+    const options = toRef(props.options) as unknown as Ref<Required<NotifierPluginOptions>>;
+
+    /**
+     * Array including state of notifictions
+     */
+    const notifications = shallowRef([]) as Ref<Required<NotifierOptions & { id: number }>[]>;
+
+    const positionStyles = computed(() => getPositionStyles(options.value.position, options.value.containerOffset));
 
     const service: NotifierService = {
-      notify(options) {
-        console.log(options);
+      updatePluginOptions(newOptions = {}) {
+        options.value = normalizeNotifierPluginOptions(newOptions, options.value);
+      },
+
+      notify(newOptions) {
+        const notification = normalizeNotifierOptions(newOptions, options.value, {
+          id: id++,
+          destroy() {
+            notifications.value = notifications.value.filter((n) => n !== notification);
+          },
+        });
+        notifications.value = [...notifications.value, notification];
         return {};
+      },
+
+      destroy(id: number) {
+        const index = notifications.value.findIndex((n) => n.id === id);
+        if (index === -1) {
+          return false;
+        }
+        const newNotifications = notifications.value.slice();
+        newNotifications.slice(index, 1);
+        notifications.value = newNotifications;
+        return true;
+      },
+
+      destroyAll() {
+        notifications.value = [];
       },
     };
     ctx.expose(service);
 
-    return { positionStyles };
+    return { notifications, positionStyles };
   },
 };
 </script>
+
+<style scoped lang="scss">
+.vue3-notifier-notifications-list-leave-to,
+.vue3-notifier-notifications-list-enter-from {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+.vue3-notifier-notifications-list-leave-from,
+.vue3-notifier-notifications-list-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.vue3-notifier-notifications-list-move,
+.vue3-notifier-notifications-list-leave-active,
+.vue3-notifier-notifications-list-enter-active {
+  transition:
+    opacity 0.3s ease,
+    transform 0.5s ease;
+}
+
+.vue3-notifier-notifications-list-leave-active {
+  position: absolute;
+}
+</style>

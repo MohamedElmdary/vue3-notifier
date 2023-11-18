@@ -108,7 +108,7 @@ export interface NotifierPluginOptions {
 
   /**
    * Container max width (in px)
-   * @default 270
+   * @default 350
    */
   containerWidth?: number;
 
@@ -150,7 +150,6 @@ export interface NotifierOptions
     | 'plugins'
     | 'debug'
     | 'silent'
-    | 'persistent'
     | 'newOnTop'
     | 'maxNotifictions'
     | 'logger'
@@ -179,13 +178,26 @@ export interface NotifierOptions
   type?: 'default' | 'info' | 'warning' | 'success' | 'error';
 
   /**
+   * Title to show on notifiction supports html.
+   */
+  title?: string;
+
+  /**
    * Text to be render in notifiction supports html.
    */
-  text?: string;
+  description?: string;
+}
+
+export interface NotifierExtraOptions {
+  id?: number;
+  destroy?(): void;
 }
 
 export interface NotifierService {
+  updatePluginOptions(options?: NotifierPluginOptions): void;
   notify(options?: NotifierOptions): NotifictionInstance;
+  destroy(id: number): boolean;
+  destroyAll(): void;
 }
 
 export interface NotifictionInstance {}
