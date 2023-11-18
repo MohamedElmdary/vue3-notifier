@@ -35,7 +35,7 @@
         />
       </div>
       <div class="notifier-notification-close" v-if="$props.options.closable">
-        <component :is="$props.options.closeButton" @vue3-notifier:click:close="$props.options.destroy()" />
+        <component :is="$props.options.closeButton" :options="$props.options" />
       </div>
     </div>
     <div
