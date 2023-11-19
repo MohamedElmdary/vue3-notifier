@@ -16,6 +16,8 @@ npm i vue3-notifier --save
 
 ```ts
 // main.ts
+import 'vue3-notifier/style.css';
+
 import { createApp } from 'vue';
 import { useNotifierPlugin } from 'vue3-notifier';
 
