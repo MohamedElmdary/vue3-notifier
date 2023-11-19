@@ -80,7 +80,7 @@ export function normalizeNotifierOptions(
 
   return {
     id: extraOptions.id || -1,
-    destroy: extraOptions.destroy || (() => null),
+    destroy: extraOptions.destroy || (() => false),
     timeout: _options.timeout,
     component: _options.component,
     props: _options.props,

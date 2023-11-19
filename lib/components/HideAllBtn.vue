@@ -1,19 +1,13 @@
 <template>
-  <button class="vue3-notifier-hide-all-button" @click="$props.service.destroyAll()">HideAllBtn</button>
+  <button class="vue3-notifier-hide-all-button" @click="$props.notifierService.destroyAll()">HideAllBtn</button>
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue';
-import { NotifierService } from '../types';
+import { makeNotifierServiceProps } from '../props';
 
 export default {
   name: 'HideAllBtn',
-  props: {
-    service: {
-      type: Object as PropType<NotifierService>,
-      required: true,
-    },
-  },
+  props: makeNotifierServiceProps(),
 };
 </script>
 

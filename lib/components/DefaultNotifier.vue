@@ -2,78 +2,78 @@
   <div
     :class="[
       'notifier-notification',
-      { 'notifier-notification-show-close-btn-on-hover': $props.options.showCloseButtonOnHover },
-      $props.options.notificationClassList,
+      { 'notifier-notification-show-close-btn-on-hover': $props.notification.showCloseButtonOnHover },
+      $props.notification.notificationClassList,
     ]"
     :style="[
-      $props.options.notificationStyles,
+      $props.notification.notificationStyles,
       {
         backgroundColor,
         color: backgroundColor /* This style only for ::selection */,
-        paddingBottom: (!$props.options.persistent && $props.options.showProgressBar ? 20 : 15) + 'px',
+        paddingBottom: (!$props.notification.persistent && $props.notification.showProgressBar ? 20 : 15) + 'px',
       },
     ]"
-    @mouseenter="$props.options.persistent || !$props.options.pauseOnHover ? undefined : destroyTimer.pauseTimeout()"
-    @mouseleave="$props.options.persistent || !$props.options.pauseOnHover ? undefined : destroyTimer.resumeTimeout()"
+    @mouseenter="
+      $props.notification.persistent || !$props.notification.pauseOnHover ? undefined : destroyTimer.pauseTimeout()
+    "
+    @mouseleave="
+      $props.notification.persistent || !$props.notification.pauseOnHover ? undefined : destroyTimer.resumeTimeout()
+    "
   >
     <div class="notifier-notification-container">
-      <div class="notifier-notification-icon" v-if="$props.options.showIcon">
-        <component :is="$props.options.icon" />
+      <div class="notifier-notification-icon" v-if="$props.notification.showIcon">
+        <component :is="$props.notification.icon" />
       </div>
       <div
         class="notifier-notification-content"
         :style="{
-          marginLeft: $props.options.showIcon ? '15px' : 0,
-          marginRight: $props.options.closable ? '15px' : 0,
+          marginLeft: $props.notification.showIcon ? '15px' : 0,
+          marginRight: $props.notification.closable ? '15px' : 0,
         }"
       >
-        <h5 class="notifier-notification-content-title" v-if="$props.options.title" v-html="$props.options.title" />
+        <h5
+          class="notifier-notification-content-title"
+          v-if="$props.notification.title"
+          v-html="$props.notification.title"
+        />
         <p
           class="notifier-notification-content-description"
-          v-if="$props.options.description"
-          v-html="$props.options.description"
+          v-if="$props.notification.description"
+          v-html="$props.notification.description"
         />
       </div>
-      <div class="notifier-notification-close" v-if="$props.options.closable">
-        <component :is="$props.options.closeButton" :options="$props.options" />
+      <div class="notifier-notification-close" v-if="$props.notification.closable">
+        <component
+          :is="$props.notification.closeButton"
+          :notification="$props.notification"
+          :plugin-options="$props.pluginOptions"
+          :notifier-service="$props.notifierService"
+        />
       </div>
     </div>
     <div
       class="notifier-notification-progressbar"
-      :style="{ transform: `scaleX(${(destroyTimer.value / $props.options.timeout) * 100}%)` }"
-      v-if="!$props.options.persistent && $props.options.showProgressBar"
+      :style="{ transform: `scaleX(${(destroyTimer.value / $props.notification.timeout) * 100}%)` }"
+      v-if="!$props.notification.persistent && $props.notification.showProgressBar"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { computed, type PropType } from 'vue';
+import { computed } from 'vue';
 
-import type { NotifierOptions, NotifierExtraOptions, NotifierPluginOptions } from '../types';
+import { makeNotifierProps } from '../props';
 import { getNotificationBackgroundColor } from '../utils';
 import { useDestroyTimer } from '../hooks';
 
 export default {
   name: 'DefaultNotifier',
-  props: {
-    options: {
-      type: Object as PropType<Required<NotifierOptions & NotifierExtraOptions>>,
-      required: true,
-    },
-    globalOptions: {
-      type: Object as PropType<Required<NotifierPluginOptions>>,
-      required: true,
-    },
-    greeting: String,
-  },
+  props: makeNotifierProps(),
   setup(props) {
-    console.log(props.greeting);
+    console.log(props);
 
-    const backgroundColor = computed(() => getNotificationBackgroundColor(props.options.type));
-
-    const destroyTimer = useDestroyTimer(props.options, props.globalOptions, () => {
-      props.options.destroy();
-    });
+    const backgroundColor = computed(() => getNotificationBackgroundColor(props.notification.type));
+    const destroyTimer = useDestroyTimer(props.notification, props.pluginOptions, props.notification.destroy);
 
     return { backgroundColor, destroyTimer };
   },

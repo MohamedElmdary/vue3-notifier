@@ -9,7 +9,7 @@
     }"
   >
     <div key="hide-all-btn" v-if="options$.position.includes('bottom') && showHideAllBtn">
-      <component :is="options$.hideAllButton" :service="service" />
+      <component :is="options$.hideAllButton" :plugin-options="options$" :notifier-service="service" />
     </div>
 
     <div
@@ -19,42 +19,44 @@
         [options$.position.includes('bottom') ? 'marginTop' : 'marginBottom']: options$.notificationOffset + 'px',
       }"
     >
-      <component :is="options$.component" :options="notification" :global-options="options$" v-bind="options$.props" />
+      <component
+        :is="options$.component"
+        :notification="notification"
+        :plugin-options="options$"
+        :notifier-service="service"
+        v-bind="options$.props"
+      />
     </div>
 
     <div key="hide-all-btn" v-if="!options$.position.includes('bottom') && showHideAllBtn">
-      <component :is="options$.hideAllButton" :service="service" />
+      <component :is="options$.hideAllButton" :plugin-options="options$" :notifier-service="service" />
     </div>
   </transition-group>
 </template>
 
 <script lang="ts">
-import { type PropType, type Ref, computed, toRef, shallowRef } from 'vue';
-import { leave } from '../animations';
+import { type Ref, computed, toRef, shallowRef } from 'vue';
 
-import type { NotifierPluginOptions, NotifierService, NotifierOptions, NotifierExtraOptions } from '../types';
+import type { NotifierService, NotifierOptions, NotifierExtraOptions } from '../types';
+import { makePluginOptionsProps } from '../props';
 import {
   getPositionStyles,
   normalizeNotifierPluginOptions,
   normalizeNotifierOptions,
   getTransitionName,
 } from '../utils';
+import { leave } from '../animations';
 
 let id = 1;
 
 export default {
   name: 'NotifierApp',
-  props: {
-    options: {
-      type: Object as PropType<Required<NotifierPluginOptions>>,
-      required: true,
-    },
-  },
+  props: makePluginOptionsProps(),
   setup(props, ctx) {
     /**
      * Turn `props.options` into ref to allow modifying it from service
      */
-    const options$ = toRef(props.options) as unknown as Ref<Required<NotifierPluginOptions>>;
+    const options$ = toRef(props.pluginOptions);
 
     /**
      * Array including state of notifictions
@@ -69,9 +71,9 @@ export default {
 
     const visibleNotifications = computed(() => {
       if (options$.value.newOnTop) {
-        return notifications.value.slice(0, 3);
+        return notifications.value.slice(0, options$.value.maxNotifictions);
       }
-      return notifications.value.slice(-3);
+      return notifications.value.slice(-1 * options$.value.maxNotifictions);
     });
 
     const service: NotifierService = {
