@@ -9,12 +9,13 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/vue3-notifier.umd.cjs",
-  "module": "./dist/vue3-notifier.js",
+  "main": "./dist/vue3-notifier.umd.js",
+  "module": "./dist/vue3-notifier.mjs",
   "exports": {
     ".": {
-      "import": "./dist/vue3-notifier.js",
-      "require": "./dist/vue3-notifier.umd.cjs"
+      "import": "./dist/vue3-notifier.mjs",
+      "require": "./dist/vue3-notifier.umd.js",
+      "types": "./dist/index.d.ts"
     },
     "./style.css": "./dist/style.css"
   },

@@ -1,4 +1,5 @@
 import type { PropType } from 'vue';
+
 import type { NotifierExtraOptions, NotifierOptions, NotifierPluginOptions, NotifierService } from './types';
 
 export function makePluginOptionsProps() {
@@ -35,3 +36,8 @@ export function makeNotifierProps() {
     ...makeNotificationProps(),
   };
 }
+
+// A hotfix till find why the following happen!!
+// I don't have any idea why `PropType` get omited by the compile while building
+// Unless I exported it
+export { PropType as __PropType };
