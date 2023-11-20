@@ -227,3 +227,176 @@ async function runDemo() {
 }
 </script>
 ```
+
+### 4. Advanced Usage
+
+![Advanced Usage Video](examples/advanced-example.gif)
+
+```ts
+// main.ts
+import 'vue3-notifier/style.css';
+
+import { createApp } from 'vue';
+import { useNotifierPlugin } from 'vue3-notifier';
+
+import App from './App.vue';
+
+createApp(App)
+  .use(
+    useNotifierPlugin({
+      persistent: true,
+      maxNotifictions: 10,
+    }),
+  )
+
+  .mount('#app');
+```
+
+```vue
+<!-- App.vue -->
+<script lang="ts" setup>
+import { onMounted } from 'vue';
+import { useNotifier, type NotifierOptions } from 'vue3-notifier';
+
+const delay = (ms = 500) => new Promise((res) => setTimeout(res, ms));
+
+const notifier = useNotifier();
+
+onMounted(runDemo);
+async function runDemo() {
+  let [a, b, c, d, e] = await Promise.all(
+    (<const>['default', 'error', 'info', 'warning', 'success']).map(async (type, index) =>
+      delay(500 + 500 * index).then(() =>
+        notifier.notify({
+          title: `Notification #${index + 1}`,
+          description: `Description for notification #${index}`,
+          type,
+        }),
+      ),
+    ),
+  );
+
+  await delay();
+
+  notifier.updatePluginOptions({ position: 'top left' });
+
+  await delay(1_000);
+
+  a.destroy();
+
+  await delay(750);
+
+  a = notifier.notify({
+    title: 'Notification from top left',
+    description: 'This is example notification from top left',
+    type: 'warning',
+  });
+
+  await delay();
+
+  notifier.updatePluginOptions({ position: 'top right' });
+
+  await delay(1_000);
+
+  c.destroy();
+
+  await delay(750);
+
+  c = notifier.notify({
+    showIcon: false,
+    title: 'Notification from top right',
+    description: 'This is example notification from top right',
+    type: 'info',
+  });
+
+  await delay();
+
+  notifier.updatePluginOptions({ position: 'top' });
+
+  await delay(1_000);
+
+  notifier.updatePluginOptions({ position: 'bottom left' });
+
+  await delay(1_000);
+
+  notifier.updatePluginOptions({ position: 'bottom' });
+
+  await delay(1_000);
+
+  notifier.updatePluginOptions({ position: 'center' });
+
+  await delay(1_000);
+
+  notifier.destroyAll();
+}
+</script>
+```
+
+### 5. Custom Components
+
+![Custom Components Video](examples/components-example.gif)
+
+```vue
+<!-- CustomNotifiction.vue -->
+<template>
+  <div
+    :style="{
+      fontFamily: 'sans-serif',
+      color: '#fff',
+      backgroundColor: '#333',
+      padding: '15px',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    }"
+  >
+    <div>
+      <h5>{{ $props.notification.title }}</h5>
+      <p>{{ $props.notification.description }}</p>
+    </div>
+    <button @click="$props.notification.destroy()">Close</button>
+  </div>
+</template>
+
+<script lang="ts">
+import { makeNotifierProps } from 'vue3-notifier';
+
+export default {
+  props: makeNotifierProps(),
+};
+</script>
+```
+
+```ts
+// main.ts
+import { createApp } from 'vue';
+import { useNotifierPlugin } from 'vue3-notifier';
+
+import App from './App.vue';
+import CustomNotifiction from './component/CustomNotifiction.vue';
+
+createApp(App)
+  .use(
+    useNotifierPlugin({
+      component: CustomNotifiction,
+    }),
+  )
+
+  .mount('#app');
+```
+
+```vue
+<!-- App.vue -->
+<script lang="ts" setup>
+import { useNotifier } from 'vue3-notifier';
+
+const notifier = useNotifier();
+
+notifier.notify({
+  title: 'Custom Notification',
+  description: 'Awesome!!',
+});
+</script>
+```
+
+### 6. Vuetify Alert Example
