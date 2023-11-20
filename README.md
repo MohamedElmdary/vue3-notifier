@@ -39,7 +39,7 @@ notifier.notify();
 
 ## Examples
 
-Example are add in docs/examples.md [Find More!](https://github.com/MohamedElmdary/vue3-notifier/blob/v1.0.0/docs/examples.md)
+Example are add in docs/examples.md [Find More!](https://github.com/MohamedElmdary/vue3-notifier/blob/master/docs/examples.md)
 
 ## API Documentation
 
