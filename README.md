@@ -39,7 +39,7 @@ notifier.notify();
 
 ## Examples
 
-Example are add in docs/examples.md [docs/examples.md](Find More!)
+Example are add in docs/examples.md [Find More!](docs/examples.md)
 
 ## API Documentation
 
