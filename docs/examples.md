@@ -400,3 +400,116 @@ notifier.notify({
 ```
 
 ### 6. Vuetify Alert Example
+
+![Vuetify Example](examples/vuetify-example.gif)
+
+```ts
+// vuetify
+// yarn install vuetify @mdi/font
+
+import 'vuetify/styles';
+import '@mdi/font/css/materialdesignicons.min.css';
+
+import { createVuetify } from 'vuetify';
+import * as components from 'vuetify/components';
+import * as directives from 'vuetify/directives';
+
+export const $vuetify = createVuetify({
+  components,
+  directives,
+  theme: {
+    defaultTheme: 'dark',
+  },
+});
+```
+
+```vue
+<!-- CustomNotifiction.vue -->
+<template>
+  <v-alert
+    :variant="variant"
+    :icon="icon"
+    :type="$props.notification.type === 'default' ? undefined : $props.notification.type"
+  >
+    <v-alert-title>{{ $props.notification.title }}</v-alert-title>
+    <span>{{ $props.notification.description }}</span>
+  </v-alert>
+</template>
+
+<script lang="ts">
+import type { PropType } from 'vue';
+import { computed } from 'vue';
+import { makeNotifierProps } from 'vue3-notifier';
+
+export default {
+  props: {
+    ...makeNotifierProps(),
+    variant: String as PropType<undefined | 'tonal'>,
+  },
+  setup(props) {
+    const icon = computed(() => (props.notification.type === 'default' ? 'mdi-bell-ring' : undefined));
+
+    return { icon };
+  },
+};
+</script>
+```
+
+```ts
+// main.ts
+import { createApp } from 'vue';
+import { useNotifierPlugin } from 'vue3-notifier';
+
+import App from './App.vue';
+import { $vuetify } from '@/plugins/vuetify';
+import CustomNotifiction from './component/CustomNotifiction.vue';
+
+createApp(App)
+  .use($vuetify)
+  .use(
+    useNotifierPlugin({
+      component: CustomNotifiction,
+      plugins: [$vuetify],
+      maxNotifictions: 20,
+    }),
+  )
+
+  .mount('#app');
+```
+
+```vue
+<!-- App.vue -->
+<script lang="ts" setup>
+import { useNotifier } from 'vue3-notifier';
+import { useTheme } from 'vuetify';
+
+const notifier = useNotifier();
+const theme = useTheme();
+
+const types = [/* default */,  "info", "error", "warning", "success"] as const // prettier-ignore
+const tonalTypes = ['info', 'error', 'success'];
+
+for (const type of types) {
+  notifier.notify({
+    title: 'Custom Notification',
+    description: 'Awesome!!',
+    type,
+    props: {
+      variant: tonalTypes.includes(type as string) ? 'tonal' : undefined,
+    },
+  });
+}
+
+setTimeout(() => {
+  theme.global.name.value = 'light';
+}, 1000);
+
+setTimeout(() => {
+  theme.global.name.value = 'dark';
+}, 2000);
+
+setTimeout(() => {
+  notifier.destroyAll();
+}, 3000);
+</script>
+```

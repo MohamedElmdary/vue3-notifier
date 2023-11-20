@@ -24,7 +24,7 @@
         :notification="notification"
         :plugin-options="options$"
         :notifier-service="service"
-        v-bind="options$.props"
+        v-bind="{ ...options$.props, ...notification.props }"
       />
     </div>
 
