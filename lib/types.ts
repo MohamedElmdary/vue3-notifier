@@ -2,7 +2,7 @@ import type { Component, Plugin, StyleValue, VNode, VueElement, VueElementConstr
 
 export type NotifierComponent = Component | VNode | VueElement | VueElementConstructor;
 
-export interface NotifierPluginOptions {
+export interface NotifierPluginOptions<TProps extends object = Record<string, any>> {
   /**
    * This identifier should be used only while having more than one notifiction app
    * @default 'default'
@@ -42,7 +42,7 @@ export interface NotifierPluginOptions {
   /**
    * Props to pass to component.
    */
-  props?: Record<string, any>;
+  props?: TProps;
 
   /**
    * A set of plugins that might be injected to your app.
@@ -161,9 +161,9 @@ export interface NotifierPluginOptions {
   showHideAllButton?: boolean;
 }
 
-export interface NotifierOptions
+export interface NotifierOptions<TProps extends object = Record<string, any>>
   extends Omit<
-    NotifierPluginOptions,
+    NotifierPluginOptions<TProps>,
     | 'position'
     | 'plugins'
     | 'debug'
@@ -214,9 +214,9 @@ export interface NotifierExtraOptions {
   destroy?(): boolean;
 }
 
-export interface NotifierService {
-  updatePluginOptions(options?: NotifierPluginOptions): void;
-  notify(options?: NotifierOptions): Required<NotifierOptions & NotifierExtraOptions>;
+export interface NotifierService<TProps extends object = Record<string, any>> {
+  updatePluginOptions(options?: NotifierPluginOptions<TProps>): void;
+  notify(options?: NotifierOptions<TProps>): Required<NotifierOptions<TProps> & NotifierExtraOptions>;
   destroy(id: number): boolean;
   destroyAll(): void;
 }

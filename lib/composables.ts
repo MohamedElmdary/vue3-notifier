@@ -37,6 +37,6 @@ export function useNotifierPlugin(options?: NotifierPluginOptions): Plugin {
  * ID is targeting specific app
  * @param { string } id
  */
-export function useNotifier(id: string = 'default') {
-  return inject(getKey(id)) as NotifierService;
+export function useNotifier<TProps extends object = Record<string, any>>(id: string = 'default') {
+  return inject(getKey(id)) as NotifierService<TProps>;
 }
