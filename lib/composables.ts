@@ -22,12 +22,17 @@ export function useNotifierPlugin(options?: NotifierPluginOptions): Plugin {
 
       // Create 2nd app to serve notifications
       _options.debug && _options.logger.info!(`Start initializing plugin for project(${_options.id})`);
-      const notifierApp = createApp(NotifierApp, { pluginOptions: _options });
+      const notifierApp = createApp(NotifierApp, {
+        pluginOptions: _options,
+
+        // Inject notifier service in main app
+        provideService(s: any) {
+          app.provide(getKey(_options.id), s);
+        },
+      });
       _options.plugins.forEach(notifierApp.use);
       notifierApp.mount(document.body.appendChild(document.createElement('div')));
 
-      // Inject notifier service in main app
-      app.provide(getKey(_options.id), notifierApp._instance!.exposed);
       _options.debug && _options.logger.info!(`Plugin is initialized and ready to use for project(${_options.id})`);
     },
   };

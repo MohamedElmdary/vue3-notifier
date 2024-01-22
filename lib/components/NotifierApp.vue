@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { type Ref, computed, toRef, shallowRef } from 'vue';
+import { type Ref, computed, toRef, shallowRef, PropType } from 'vue';
 
 import type { NotifierService, NotifierOptions, NotifierExtraOptions } from '../types';
 import { makePluginOptionsProps } from '../props';
@@ -51,8 +51,11 @@ let id = 1;
 
 export default {
   name: 'NotifierApp',
-  props: makePluginOptionsProps(),
-  setup(props, ctx) {
+  props: {
+    ...makePluginOptionsProps(),
+    provideService: { type: Object as PropType<any>, require: true },
+  },
+  setup(props) {
     /**
      * Turn `props.options` into ref to allow modifying it from service
      */
@@ -121,7 +124,7 @@ export default {
         notifications.value = [];
       },
     };
-    ctx.expose(service);
+    props.provideService(service);
 
     return {
       options$,
